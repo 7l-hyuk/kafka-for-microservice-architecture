@@ -3,11 +3,8 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from aiokafka import AIOKafkaConsumer, AIOKafkaProducer
 import asyncio
-import json
-import time
 
-
-KAFKA_BROKER = "localhost:29092"
+KAFKA_BROKER = "kafka:9092"
 
 async def get_consumer():
     consumer = AIOKafkaConsumer(
@@ -17,12 +14,6 @@ async def get_consumer():
     )
     await consumer.start()
     return consumer
-
-
-async def get_producer():
-    producer = AIOKafkaProducer(bootstrap_servers=KAFKA_BROKER)
-    await producer.start()
-    return producer
 
 
 async def consume_orders():
@@ -37,8 +28,6 @@ async def consume_orders():
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     asyncio.create_task(consume_orders())
-
     yield
-
-
+    
 app = FastAPI(lifespan=lifespan)

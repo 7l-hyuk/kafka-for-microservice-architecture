@@ -1,12 +1,9 @@
 from fastapi import FastAPI
 from aiokafka import AIOKafkaProducer
-import json
-import asyncio
 
 app = FastAPI()
 
-KAFKA_BROKER = "localhost:29092"
-
+KAFKA_BROKER = "kafka:9092"
 
 async def get_producer():
     producer = AIOKafkaProducer(bootstrap_servers=KAFKA_BROKER)
