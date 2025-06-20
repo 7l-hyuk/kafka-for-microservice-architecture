@@ -1,9 +1,11 @@
 from contextlib import asynccontextmanager
+import asyncio
 
 from fastapi import FastAPI
 from aiokafka import AIOKafkaConsumer
-from aiokafka.errors import KafkaConnectionError
-import asyncio
+
+from src.logger import logger
+
 
 KAFKA_BROKER = "kafka:9092"
 
@@ -27,7 +29,7 @@ async def consume_orders():
     consumer = await get_consumer()
     try:
         async for msg in consumer:
-            print(f"Comsumer Receive: {msg}")
+            logger.info(f"Comsumer Receive: {msg}")
     finally:
         await consumer.stop()
 

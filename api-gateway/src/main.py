@@ -1,6 +1,8 @@
 from fastapi import FastAPI
 from aiokafka import AIOKafkaProducer
 
+from src.logger import logger
+
 app = FastAPI()
 
 KAFKA_BROKER = "kafka:9092"
@@ -19,7 +21,7 @@ async def create_order(iter: int):
         for i in range(iter):
             message = f"message{i}".encode("utf-8")
             await producer.send_and_wait("test-topic", message)
-            print(f"Sent: {message}")
+            logger.info(f"Sent: {message}")
         return {"status": "Order request sent to Kafka"}
     finally:
         await producer.stop()
